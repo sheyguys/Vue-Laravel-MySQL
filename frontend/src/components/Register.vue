@@ -1,98 +1,117 @@
 <template>
   <div>
-    <b-form class="form" @submit="onSubmit" @reset="onReset" v-if="show">
+    <b-form class="form" @submit="onSubmit" @reset="onReset">
       <h1>PERSONAL INFORMATION</h1>
-      <b-form-group
-        id="input-group-1"
-        label="Email address:"
-        label-for="input-1"
-        description="We'll never share your email with anyone else."
-      >
+      <b-form-group id="input-group-1" label="Thai Name:" label-for="input-1">
         <b-form-input
           id="input-1"
-          v-model="form.email"
-          type="email"
+          v-model="thName"
           required
-          placeholder="Enter email"
+          placeholder="Enter Thai Name"
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
+      <b-form-group id="input-group-2" label="English Name:" label-for="input-2">
         <b-form-input
           id="input-2"
-          v-model="form.name"
+          v-model="enName"
           required
-          placeholder="Enter name"
+          placeholder="Enter English Name"
         ></b-form-input>
       </b-form-group>
-
-      <b-form-group id="input-group-3" label="Food:" label-for="input-3">
-        <b-form-select
-          id="input-3"
-          v-model="form.food"
-          :options="foods"
-          required
-        ></b-form-select>
-      </b-form-group>
+      
+      <center>
       <br>
-      <b-button @click="socialFacecbookLogin" variant="primary">Facebook</b-button>
+      <b-button @click="socialFacecbookLogin" variant="primary">Sign in with Facebook</b-button>
       <br><br>
         <span>
           <h1>FaceBook: {{profiledata.fullname}}</h1>
           <h1>Email: {{profiledata.email}}</h1>
           <br><br>
-          <img class="profile" :src=profiledata.profile_image>
+          <img class="profile" :src=profiledata.profile_image >
         </span>
-      <b-form-group id="input-group-4">
-        <b-form-checkbox-group v-model="form.checked" id="checkboxes-4">
-          <b-form-checkbox value="me">Check me out</b-form-checkbox>
-          <b-form-checkbox value="that">Check that out</b-form-checkbox>
-        </b-form-checkbox-group>
+      <br><br>
+      </center>
+      
+      <b-form-group id="input-group-3" label="ID card:" label-for="input-3">
+        <b-form-input
+          id="input-3"
+          v-model="idcard"
+          required
+          placeholder="Enter ID card"
+        ></b-form-input>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">Submit</b-button>
+      
+      <b-form-group id="input-group-4" label="Phone:" label-for="input-4">
+        <b-form-input
+          id="input-4"
+          v-model="phone"
+          required
+          placeholder="Enter Phone"
+        ></b-form-input>
+      </b-form-group>
+
+      
+      <b-form-group id="input-group-5" label="Address:" label-for="input-5">
+        <b-form-input
+          id="input-5"
+          v-model="address"
+          required
+          placeholder="Enter Address"
+        ></b-form-input>
+      </b-form-group>
+      <center>
+      <b-button type="submit" variant="primary" @click="$router.push('register')">Confirm</b-button>
+      <br><br>
       <b-button type="reset" variant="danger">Reset</b-button>
+      <br><br>
+      <b-button @click="$router.push('result')" variant="success">Result</b-button>
+      </center>
     </b-form>
-    <b-card class="mt-3" header="Form Data Result">
-    <pre class="m-0">{{ form }}</pre>
-    </b-card>
   </div>
 </template>
 
 <script>
 import  firebase from "firebase";
+import api from "../api";
   export default {
     data() {
       return {
-        profiledataearth: {},
         profiledata: {},
-        form: {
-          email: '',
-          name: '',
-          food: null,
-          checked: []
-        },
-        foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-        show: true
+        thName: "",
+        enName: "",
+        idcard: "",
+        facebook: "",
+        email: "",
+        address: "",
+        phone: "",
       }
     },
     methods: {
       onSubmit(evt) {
         evt.preventDefault()
-        alert(JSON.stringify(this.form))
+        this.facebook = this.profiledata.fullname,
+        this.email = this.profiledata.email,
+          api.postMember(
+          this.thName,
+          this.enName,
+          parseInt(this.idcard),
+          this.facebook,
+          this.email,
+          this.address,
+          this.phone
+        );
+        alert("Post Complete!!");
       },
       onReset(evt) {
         evt.preventDefault()
         // Reset our form values
-        this.form.email = ''
-        this.form.name = ''
-        this.form.food = null
-        this.form.checked = []
-        // Trick to reset/clear native browser form validation state
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        })
+        this.thName = ''
+        this.enName = ''
+        this.idcard = ''
+        this.phone = ''
+        this.address = ''
       },
       socialFacecbookLogin: function() {
       const provide = new firebase.auth.FacebookAuthProvider();
@@ -128,9 +147,4 @@ h1 {
   font-family: Courier;
 }
 
-.profile {
-    margin-left: 31.5%;
-    max-width: 500px;
-    max-height: 500px;
-}
 </style>

@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 Route::get('employees', 'MemberController@showall');
 Route::get('employees/{id}', 'MemberController@showbyid');
-Route::post('employees', 'MemberController@postmember');
-Route::put('employees/{id}', 'MemberController@update');
-Route::delete('employees/{id}', 'MemberController@delete');
+Route::post('employee', 'MemberController@postmember');
+Route::put('employee/{id}', 'MemberController@update');
+Route::delete('employee/{id}', 'MemberController@delete');
 

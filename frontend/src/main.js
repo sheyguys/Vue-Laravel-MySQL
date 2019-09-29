@@ -4,9 +4,16 @@ import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import  firebase from 'firebase';
+import VueRouter from 'vue-router'
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+  mode: 'history',
+  routes
+});
 
 const config = {
   apiKey: "AIzaSyC_u27mI5neEM6BVCM1yqrAN-WHTk8-QKE",
@@ -18,8 +25,13 @@ const config = {
   appId: "1:179670983174:web:64c4ea52d04ec19d"
 };
 
+import routes from './routes';
+
+Vue.config.productionTip = false
+
 firebase.initializeApp(config);
 
 new Vue({
+  router,
   render: h => h(App),
 }).$mount('#app')
